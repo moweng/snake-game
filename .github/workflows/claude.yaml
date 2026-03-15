@@ -1,0 +1,20 @@
+name: Claude AI Assistant
+on:
+  issue_comment:
+  pull_request_review_comment:
+  issues:
+  pull_request:
+
+jobs:
+  claude:
+    runs-on: ubuntu-latest
+    if: |
+      contains(github.event.comment.body, '@claude') ||
+      contains(github.event.issue.body, '@claude')
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: anthropics/claude-code-action@v1
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_AUTH_TOKEN }}
