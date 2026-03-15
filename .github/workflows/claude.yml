@@ -1,4 +1,6 @@
 name: Claude AI Assistant
+env:
+  ANTHROPIC_BASE_URL: https://coding.dashscope.aliyuncs.com/apps/anthropic
 on:
   issue_comment:
   pull_request_review_comment:
