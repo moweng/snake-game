@@ -1,0 +1,43 @@
+# .github/workflows/claude-code-review.yml
+name: Claude Code Review
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+  pull_request_review:
+    types: [submitted]
+
+jobs:
+  claude-review:
+    runs-on: ubuntu-latest
+    permissions:  # 必须配置这些权限，GITHUB_TOKEN 才有权限写 PR 评论
+      contents: write          # 读写仓库内容
+      pull-requests: write     # 写 PR 评论（核心！）
+      issues: write            # 写 Issue 评论
+      id-token: write          # 解决 OIDC 问题
+      actions: read            # 读取 Actions 日志（可选）
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Claude Code
+        run: |
+          npm install -g @anthropic-ai/claude-code
+
+      - name: Run Claude Code Review
+        env:
+          ANTHROPIC_BASE_URL: https://coding.dashscope.aliyuncs.com/apps/anthropic
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_AUTH_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          claude-code review-pr \
+            --pr-number=${{ github.event.pull_request.number }} \
+            --repo=${{ github.repository }} \
+            --owner=${{ github.repository_owner }}
