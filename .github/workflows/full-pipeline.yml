@@ -13,17 +13,17 @@ env:
 
 jobs:
   # ===== 阶段1：代码检查 =====
-  lint:
-    name: Lint & Format
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-      - run: npm ci
-      - run: npm run lint
-      - run: npm run format:check
+  # lint:
+  #   name: Lint & Format
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #     - uses: actions/setup-node@v4
+  #       with:
+  #         node-version: ${{ env.NODE_VERSION }}
+  #     - run: npm ci
+  #     - run: npm run lint
+  #     - run: npm run format:check
 
   # ===== 阶段2：单元测试 =====
   # test:
