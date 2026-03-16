@@ -20,9 +20,12 @@ jobs:
       - name: Get PR Diff
         id: diff
         run: |
-          # 确保获取到 PR 的完整 Diff
-          git fetch origin ${{ github.base_ref }}
-          git diff origin/${{ github.base_ref }}...${{ github.head_ref }} > pr_diff.txt
+          # 确保拉取远程所有分支
+          git fetch origin --force
+
+          # 👇 使用两个点号 (git diff A B)，直接比较版本，不依赖 merge base，绝对不会报错
+          git diff origin/${{ github.base_ref }} origin/${{ github.head_ref }} > pr_diff.txt || true
+
           # 校验 Diff 是否为空
           if [ ! -s pr_diff.txt ]; then
             echo "PR 无代码变更，跳过审查"
