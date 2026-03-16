@@ -13,6 +13,11 @@ jobs:
     if: |
       contains(github.event.comment.body, '@claude') ||
       contains(github.event.issue.body, '@claude')
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write
+      id-token: write  # 解决 OIDC token 问题的核心配置
     steps:
       - uses: actions/checkout@v4
         with:
