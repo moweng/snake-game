@@ -21,8 +21,8 @@ jobs:
         id: diff
         run: |
           # 确保获取到 PR 的完整 Diff
-          git fetch origin main
-          git diff origin/main...HEAD > pr_diff.txt
+          git fetch origin ${{ github.base_ref }}
+          git diff origin/${{ github.base_ref }}...${{ github.head_ref }} > pr_diff.txt
           # 校验 Diff 是否为空
           if [ ! -s pr_diff.txt ]; then
             echo "PR 无代码变更，跳过审查"
