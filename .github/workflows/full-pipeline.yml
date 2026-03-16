@@ -9,7 +9,7 @@ on:
 
 env:
   NODE_VERSION: '20'
-  CLAUDE_MODEL: qwen3.5-plus
+  ANTHROPIC_BASE_URL: https://coding.dashscope.aliyuncs.com/apps/anthropic
 
 jobs:
   # ===== 阶段1：代码检查 =====
