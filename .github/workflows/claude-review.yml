@@ -39,7 +39,22 @@ jobs:
         uses: anthropics/claude-code-action@v1
         with:
           anthropic_api_key: ${{ secrets.ANTHROPIC_AUTH_TOKEN }}
-          prompt: "/review REPO: ${{ github.repository }} PR_NUMBER: ${{ github.event.pull_request.number }}"
+          prompt: " 你是资深代码评审专家，需要完成以下任务：
+            1. 先执行命令：gh pr diff ${{ github.event.pull_request.number }} --repo ${{ github.repository }}
+            2. 分析PR中的代码变更，重点检查：
+               - 语法错误、逻辑漏洞、性能问题
+               - 代码规范（命名、注释、格式）
+               - 潜在Bug和安全风险
+            3. 对每处问题生成**内联评论**，格式必须严格遵循：
+               - 位置：指定文件路径（如 index.html）+ 行号（如 45）
+               - 标题：简短的问题类型（如 [性能问题]、[语法错误]）
+               - 描述：清晰说明问题（1-2句话）
+               - 建议：给出可直接复制的修复代码块
+            4. 通过 `mcp__github_inline_comment__create_inline_comment` 工具，将每个问题提交到PR对应代码行，参数要求：
+               - path: 问题文件路径
+               - line: 问题行号
+               - body: 评论内容（包含标题、描述、修复建议，用Markdown格式化）
+            5. 最后在PR根评论区生成一份汇总报告，列出所有问题的文件+行号+简要描述。"
           claude_args: |
             --allowed-tools "mcp__github_inline_comment__create_inline_comment,bash(gh *)"
             --model "qwen3.5-plus"
