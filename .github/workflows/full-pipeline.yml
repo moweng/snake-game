@@ -44,6 +44,11 @@ jobs:
     name: Claude Code Review
     if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write
+      id-token: write  # 解决 OIDC token 问题的核心配置
     steps:
       - uses: actions/checkout@v4
         with:
@@ -76,6 +81,11 @@ jobs:
     name: Security Scan
     runs-on: ubuntu-latest
     # needs: test
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write
+      id-token: write  # 解决 OIDC token 问题的核心配置
     steps:
       - uses: actions/checkout@v4
 
