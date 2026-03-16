@@ -26,3 +26,13 @@ jobs:
           claude_args: |
             --allowedTools "mcp__github_inline_comment__create_inline_comment"
             --model "qwen3.5-plus"
+      - name: Print Claude Report
+        run: |
+          # 强制输出报告文件内容到日志
+          REPORT_FILE="/home/runner/work/_temp/claude-execution-output.json"
+          if [ -f "$REPORT_FILE" ]; then
+            echo "===== Claude 完整审查报告 ====="
+            cat "$REPORT_FILE" | jq .  # 格式化JSON，更易读
+          else
+            echo "⚠️  Claude 报告文件未生成，请检查API密钥和模型配置"
+          fi
